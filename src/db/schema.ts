@@ -1,8 +1,11 @@
-import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
+import { boolean, doublePrecision, integer, pgTable, timestamp, varchar } from "drizzle-orm/pg-core";
 
-export const usersTable = pgTable("users", {
+export const dangerZonesTable = pgTable("dangerzones", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   name: varchar({ length: 255 }).notNull(),
-  age: integer().notNull(),
-  email: varchar({ length: 255 }).notNull().unique(),
+  radius: integer().notNull(),
+  temporary: boolean().notNull(),
+  expires: timestamp().notNull(),
+  lat: doublePrecision().notNull(),
+  lng: doublePrecision().notNull(),
 });

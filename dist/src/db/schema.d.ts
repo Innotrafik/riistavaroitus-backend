@@ -1,10 +1,10 @@
-export declare const usersTable: import("drizzle-orm/pg-core").PgTableWithColumns<{
-    name: "users";
+export declare const dangerZonesTable: import("drizzle-orm/pg-core").PgTableWithColumns<{
+    name: "dangerzones";
     schema: undefined;
     columns: {
         id: import("drizzle-orm/pg-core").PgColumn<{
             name: "id";
-            tableName: "users";
+            tableName: "dangerzones";
             dataType: "number";
             columnType: "PgInteger";
             data: number;
@@ -21,7 +21,7 @@ export declare const usersTable: import("drizzle-orm/pg-core").PgTableWithColumn
         }, {}, {}>;
         name: import("drizzle-orm/pg-core").PgColumn<{
             name: "name";
-            tableName: "users";
+            tableName: "dangerzones";
             dataType: "string";
             columnType: "PgVarchar";
             data: string;
@@ -36,9 +36,9 @@ export declare const usersTable: import("drizzle-orm/pg-core").PgTableWithColumn
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
-        age: import("drizzle-orm/pg-core").PgColumn<{
-            name: "age";
-            tableName: "users";
+        radius: import("drizzle-orm/pg-core").PgColumn<{
+            name: "radius";
+            tableName: "dangerzones";
             dataType: "number";
             columnType: "PgInteger";
             data: number;
@@ -53,19 +53,70 @@ export declare const usersTable: import("drizzle-orm/pg-core").PgTableWithColumn
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
-        email: import("drizzle-orm/pg-core").PgColumn<{
-            name: "email";
-            tableName: "users";
-            dataType: "string";
-            columnType: "PgVarchar";
-            data: string;
+        temporary: import("drizzle-orm/pg-core").PgColumn<{
+            name: "temporary";
+            tableName: "dangerzones";
+            dataType: "boolean";
+            columnType: "PgBoolean";
+            data: boolean;
+            driverParam: boolean;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        expires: import("drizzle-orm/pg-core").PgColumn<{
+            name: "expires";
+            tableName: "dangerzones";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
             driverParam: string;
             notNull: true;
             hasDefault: false;
             isPrimaryKey: false;
             isAutoincrement: false;
             hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        lat: import("drizzle-orm/pg-core").PgColumn<{
+            name: "lat";
+            tableName: "dangerzones";
+            dataType: "number";
+            columnType: "PgDoublePrecision";
+            data: number;
+            driverParam: string | number;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        lng: import("drizzle-orm/pg-core").PgColumn<{
+            name: "lng";
+            tableName: "dangerzones";
+            dataType: "number";
+            columnType: "PgDoublePrecision";
+            data: number;
+            driverParam: string | number;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
             baseColumn: never;
             identity: undefined;
             generated: undefined;
