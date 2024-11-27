@@ -1,8 +1,9 @@
-import { Body, Controller, Get, InternalServerErrorException, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, InternalServerErrorException, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { dangerZonesTable } from 'src/db/schema';
 import 'dotenv/config';
 import { ApiKeyAuthGuard } from '../auth/api-key-auth.guard';
+import { eq } from 'drizzle-orm';
 
 @UseGuards(ApiKeyAuthGuard)
 @Controller('dangerzones')
@@ -30,6 +31,18 @@ export class DangerzonesController {
         } catch (error) {
             console.error('Error creating danger zone:', error);
             throw new InternalServerErrorException('Failed to create danger zone');
+        }
+    }
+
+    @Put(":id")
+    async updateDangerZone(@Body() updatedDangerZone: typeof dangerZonesTable.$inferInsert, @Param('id') id: number): Promise<string> {
+        updatedDangerZone.expires = new Date(updatedDangerZone.expires);
+        try {
+            await this.db.update(dangerZonesTable).set(updatedDangerZone).where(eq(dangerZonesTable.id, id));
+            return 'Danger zone updated successfully';
+        } catch (error) {
+            console.error('Error updating danger zone:', error);
+            throw new InternalServerErrorException('Failed to update danger zone');
         }
     }
 }
