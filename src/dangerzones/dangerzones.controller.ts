@@ -1,48 +1,46 @@
-import { Body, Controller, Get, InternalServerErrorException, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { drizzle } from 'drizzle-orm/node-postgres';
-import { dangerZonesTable } from 'src/db/schema';
 import 'dotenv/config';
 import { ApiKeyAuthGuard } from '../auth/api-key-auth.guard';
-import { eq } from 'drizzle-orm';
+import { DangerzonesService } from './dangerzones.service';
+import { CreateDangerZoneDto } from './dto/create-dangerzone.dto';
+import { DangerZoneDto } from './dto/dangerzone.dto';
+import { UpdateDangerZoneDto } from './dto/update-dangerzone.dto';
 
 @UseGuards(ApiKeyAuthGuard)
 @Controller('dangerzones')
 export class DangerzonesController {
 
     db = drizzle(process.env.DATABASE_URL!);
+    service = new DangerzonesService();
 
     @Get()
-    async getDangerZones(): Promise<any[]> {
-        try {
-            const dangerZones = await this.db.select().from(dangerZonesTable);
-            return dangerZones;
-        } catch (error) {
-            console.error('Error fetching danger zones:', error);
-            throw new InternalServerErrorException('Failed to fetch danger zones');
-        }
+    async findAll(): Promise<DangerZoneDto[]> {
+        return await this.service.getDangerZones();
+    }
+
+    @Get("nonexpired")
+    async findNonExpired(): Promise<DangerZoneDto[]> {
+        return await this.service.getNonExpiredDangerZones();
+    }
+
+    @Get(":id")
+    async findOne(@Param('id') id: number): Promise<DangerZoneDto> {
+        return await this.service.getDangerZoneById(id);
     }
 
     @Post()
-    async createDangerZone(@Body() newDangerZone: typeof dangerZonesTable.$inferInsert): Promise<string> {
-        newDangerZone.expires = new Date(newDangerZone.expires);
-        try {
-            await this.db.insert(dangerZonesTable).values(newDangerZone);
-            return 'Danger zone created successfully';
-        } catch (error) {
-            console.error('Error creating danger zone:', error);
-            throw new InternalServerErrorException('Failed to create danger zone');
-        }
+    async createDangerZone(@Body() dangerZone: CreateDangerZoneDto): Promise<string> {
+        return await this.service.createDangerZone(dangerZone);
     }
 
     @Put(":id")
-    async updateDangerZone(@Body() updatedDangerZone: typeof dangerZonesTable.$inferInsert, @Param('id') id: number): Promise<string> {
-        updatedDangerZone.expires = new Date(updatedDangerZone.expires);
-        try {
-            await this.db.update(dangerZonesTable).set(updatedDangerZone).where(eq(dangerZonesTable.id, id));
-            return 'Danger zone updated successfully';
-        } catch (error) {
-            console.error('Error updating danger zone:', error);
-            throw new InternalServerErrorException('Failed to update danger zone');
-        }
+    async updateDangerZone(@Body() dangerZone: UpdateDangerZoneDto, @Param('id') id: number): Promise<string> {
+        return await this.service.updateDangerZone(dangerZone, id);
+    }
+
+    @Delete(":id")
+    async deleteDangerZone(@Param('id') id: number): Promise<string> {
+        return await this.service.deleteDangerZone(id);
     }
 }

@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DangerzonesController } from './dangerzones.controller';
+import { validate } from 'class-validator';
 
 describe('DangerzonesController', () => {
   let controller: DangerzonesController;
