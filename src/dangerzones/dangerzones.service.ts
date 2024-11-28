@@ -2,7 +2,7 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { dangerZonesTable } from 'src/db/schema';
 import { DangerZoneDto } from './dto/dangerzone.dto';
-import { eq, gte, or, Update } from 'drizzle-orm';
+import { eq, gte, isNull, or, Update } from 'drizzle-orm';
 import { CreateDangerZoneDto } from './dto/create-dangerzone.dto';
 import { UpdateDangerZoneDto } from './dto/update-dangerzone.dto';
 
@@ -33,7 +33,7 @@ export class DangerzonesService {
     async getNonExpiredDangerZones(): Promise<DangerZoneDto[]> {
         try {
             const now = new Date();
-            const dangerZones = await this.db.select().from(dangerZonesTable).where(or(gte(dangerZonesTable.expires, now), eq(dangerZonesTable.expires, null)));
+            const dangerZones = await this.db.select().from(dangerZonesTable).where(or(gte(dangerZonesTable.expires, now), isNull(dangerZonesTable.expires)));
             return dangerZones;
         } catch (error) {
             console.error('Error fetching non-expired danger zones:', error);
